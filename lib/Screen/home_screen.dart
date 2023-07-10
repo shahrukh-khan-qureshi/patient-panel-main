@@ -8,12 +8,14 @@ import 'package:patient_panel/Screen/appointment_screen.dart';
 import 'package:patient_panel/Screen/findDoctor_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:patient_panel/Screen/schedule_screen.dart';
+import 'Payment_Screen.dart';
 import 'ask_question_page.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'health_blog_screen.dart';
 import 'hospital_data.dart';
 import 'medical_records_screen.dart';
+import 'privacy_policy.dart';
 
 // import 'package:flutter_html/flutter_html.dart';
 // import 'package:http/http.dart' as http;
@@ -1243,6 +1245,10 @@ class _drawerWidgetState extends State<drawerWidget> {
                 DrawerSelector = "hospital";
               });
               widget.updateSelectedUser(DrawerSelector);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HospitalListScreen()),
+              );
             },
           ),
           ListTile(
@@ -1255,6 +1261,13 @@ class _drawerWidgetState extends State<drawerWidget> {
                 DrawerSelector = "payment";
               });
               widget.updateSelectedUser(DrawerSelector);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PaymentPage(
+                          totalPrice: 1,
+                        )),
+              );
             },
           ),
           ListTile(
@@ -1296,6 +1309,14 @@ class _drawerWidgetState extends State<drawerWidget> {
                 DrawerSelector = "Policy";
               });
               widget.updateSelectedUser(DrawerSelector);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Material(
+                    child: PrivacyPolicy(),
+                  ),
+                ),
+              );
             },
           ),
           ListTile(

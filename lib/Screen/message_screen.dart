@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:patient_panel/Screen/chat_screen.dart';
 
 class MessageScreen extends StatefulWidget {
-  const MessageScreen({super.key});
+  const MessageScreen({Key? key}) : super(key: key);
 
   @override
   State<MessageScreen> createState() => _MessageScreenState();
@@ -15,6 +15,42 @@ class _MessageScreenState extends State<MessageScreen> {
     "doctor3.jpg",
     "doctor4.jpg",
   ];
+
+  List<String> recentChats = [
+    "Dr Name 1",
+    "Dr Name 2",
+    "Dr Name 3",
+    "Dr Name 4",
+  ];
+
+  List<String> filteredChats = [];
+
+  TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    filteredChats = recentChats;
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void searchChats(String keyword) {
+    setState(() {
+      if (keyword.isEmpty) {
+        filteredChats = recentChats;
+      } else {
+        filteredChats = recentChats
+            .where((chat) => chat.toLowerCase().contains(keyword.toLowerCase()))
+            .toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -40,36 +76,41 @@ class _MessageScreenState extends State<MessageScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    const BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    )
-                  ]),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  )
+                ],
+              ),
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: TextFormField(
-                          initialValue: "",
-                          decoration: const InputDecoration(
-                            hintText: "Search",
-                            border: InputBorder.none,
-                          ),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: TextFormField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          searchChats(value);
+                        },
+                        decoration: const InputDecoration(
+                          hintText: "Search",
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
-                    const Icon(
-                      Icons.search,
-                      color: Color.fromARGB(255, 102, 102, 235),
-                    )
-                  ]),
+                  ),
+                  const Icon(
+                    Icons.search,
+                    color: Color.fromARGB(255, 102, 102, 235),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(
@@ -96,16 +137,17 @@ class _MessageScreenState extends State<MessageScreen> {
                   margin: const EdgeInsets.symmetric(horizontal: 12),
                   width: 65,
                   height: 65,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          spreadRadius: 2,
-                          blurRadius: 10,
-                        )
-                      ]),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        spreadRadius: 2,
+                        blurRadius: 10,
+                      )
+                    ],
+                  ),
                   child: Stack(
                     textDirection: TextDirection.rtl,
                     children: [
@@ -128,21 +170,23 @@ class _MessageScreenState extends State<MessageScreen> {
                         height: 20,
                         width: 20,
                         decoration: const BoxDecoration(
-                            color: Colors.white, shape: BoxShape.circle),
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
                         child: Container(
                           decoration: const BoxDecoration(
                             color: Colors.green,
                             shape: BoxShape.circle,
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 );
               },
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           const Padding(
@@ -157,23 +201,28 @@ class _MessageScreenState extends State<MessageScreen> {
           ),
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 4,
+            itemCount: filteredChats.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
+              final chat = filteredChats[index];
               return Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ListTile(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ChatScreen()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(),
+                      ),
+                    );
                   },
                   leading: CircleAvatar(
                     radius: 30,
                     backgroundImage: AssetImage("assets/${imgs[index]}"),
                   ),
-                  title: const Text(
-                    "Dr Name",
-                    style: TextStyle(
+                  title: Text(
+                    chat,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -189,7 +238,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 ),
               );
             },
-          )
+          ),
         ],
       ),
     );

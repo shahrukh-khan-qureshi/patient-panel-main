@@ -6,11 +6,13 @@ import 'package:camera/camera.dart';
 class CallingScreen extends StatefulWidget {
   final ImageProvider avatarImage;
   final String doctorName;
+  final bool isVideoCall;
 
   const CallingScreen({
     Key? key,
     required this.avatarImage,
     required this.doctorName,
+    required this.isVideoCall,
   }) : super(key: key);
 
   @override
@@ -18,23 +20,25 @@ class CallingScreen extends StatefulWidget {
 }
 
 class _CallingScreenState extends State<CallingScreen> {
-  CameraController? _cameraController;
-  late Future<void> _initializeCameraController;
-
   Timer? _timer;
   int _durationInSeconds = 0;
   bool _isCallAccepted = false;
   bool _isCallEnded = false;
+  CameraController? _cameraController;
+  late Future<void> _initializeCameraController;
 
   @override
   void initState() {
     super.initState();
+    if (widget.isVideoCall) {
+      _initializeCameraController = initializeCamera();
+    }
   }
 
   @override
   void dispose() {
-    _cameraController?.dispose();
     _timer?.cancel();
+    _cameraController?.dispose();
     super.dispose();
   }
 
@@ -72,126 +76,153 @@ class _CallingScreenState extends State<CallingScreen> {
     Navigator.pop(context);
   }
 
+  void acceptCall() {
+    setState(() {
+      _isCallAccepted = true;
+    });
+    startTimer();
+    if (widget.isVideoCall) {
+      initializeCamera();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (!_isCallAccepted) {
-      return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: !_isCallEnded ? null : SizedBox.shrink(),
-        ),
-        extendBodyBehindAppBar: true,
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/wave_design_image.png'),
-              fit: BoxFit.cover,
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: !_isCallEnded ? null : SizedBox.shrink(),
+      ),
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/wave_design_image.png'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          child: Column(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 80),
-              CircleAvatar(
-                radius: 80,
-                backgroundImage: widget.avatarImage,
-              ),
-              SizedBox(height: 20),
-              Text(
-                widget.doctorName,
-                style: TextStyle(fontSize: 24, color: Colors.white),
-              ),
-              SizedBox(height: 40),
-              Text(
-                'Duration: ${getFormattedDuration()}',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              SizedBox(height: 40),
-              Text(
-                'Calling...',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+              if (!_isCallAccepted || !widget.isVideoCall) ...[
+                SizedBox(height: 80),
+                CircleAvatar(
+                  radius: 80,
+                  backgroundImage: widget.avatarImage,
                 ),
-              ),
-              SizedBox(height: 80),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              ],
+              SizedBox(height: 20),
+              if (_isCallAccepted && widget.isVideoCall) ...[
+                Text(
+                  widget.doctorName,
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
+                SizedBox(height: 40),
+                Text(
+                  'Duration: ${getFormattedDuration()}',
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+              ],
+              if (!_isCallAccepted ||
+                  (widget.isVideoCall &&
+                      !_cameraController!.value.isInitialized)) ...[
+                Text(
+                  'Calling...',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 80),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.red,
+                      child: IconButton(
+                        icon: Icon(Icons.call_end),
+                        color: Colors.white,
+                        onPressed: () {
+                          endCall();
+                        },
+                      ),
+                    ),
+                    if (widget.isVideoCall) ...[
+                      SizedBox(width: 10),
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.green,
+                        child: IconButton(
+                          icon: Icon(Icons.video_call),
+                          color: Colors.white,
+                          onPressed: () {
+                            acceptCall();
+                          },
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
+              if (_isCallEnded) ...[
+                SizedBox(height: 80),
+                Text(
+                  'Call ended',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          if (_isCallAccepted &&
+              widget.isVideoCall &&
+              _cameraController != null &&
+              _cameraController!.value.isInitialized) ...[
+            Positioned(
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Column(
                 children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.red,
-                    child: IconButton(
-                      icon: Icon(Icons.call_end),
-                      color: Colors.white,
-                      onPressed: () {
-                        endCall();
-                      },
+                  Expanded(
+                    child: AspectRatio(
+                      aspectRatio: _cameraController!.value.aspectRatio,
+                      child: CameraPreview(_cameraController!),
                     ),
                   ),
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.green,
-                    child: IconButton(
-                      icon: Icon(Icons.video_call),
-                      color: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          _isCallAccepted = true;
-                        });
-                        startTimer();
-                        initializeCamera();
-                      },
-                    ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundColor: Colors.red,
+                        child: IconButton(
+                          icon: Icon(Icons.call_end),
+                          color: Colors.white,
+                          onPressed: () {
+                            endCall();
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      if (_cameraController == null || !_cameraController!.value.isInitialized) {
-        return Container(); // Return an empty container if the camera is not initialized yet
-      }
-
-      return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: !_isCallEnded ? null : SizedBox.shrink(),
-        ),
-        extendBodyBehindAppBar: true,
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/wave_design_image.png'),
-              fit: BoxFit.cover,
             ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AspectRatio(
-                aspectRatio: _cameraController!.value.aspectRatio,
-                child: CameraPreview(_cameraController!),
-              ),
-              SizedBox(height: 20),
-              Text(
-                widget.doctorName,
-                style: TextStyle(fontSize: 24, color: Colors.white),
-              ),
-              SizedBox(height: 40),
-              Text(
-                'Duration: ${getFormattedDuration()}',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+          ],
+        ],
+      ),
+    );
   }
 }

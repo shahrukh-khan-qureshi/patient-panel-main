@@ -45,6 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       builder: (context) => CallingScreen(
                         avatarImage: AssetImage("assets/doctor1.jpg"),
                         doctorName: "Dr Name",
+                        isVideoCall: false,
                       ),
                     ),
                   );
@@ -66,6 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       builder: (context) => CallingScreen(
                         avatarImage: AssetImage("assets/doctor1.jpg"),
                         doctorName: "Dr Name",
+                        isVideoCall: true,
                       ),
                     ),
                   );
