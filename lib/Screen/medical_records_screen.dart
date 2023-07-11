@@ -83,7 +83,7 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
             shadowColor: Colors.grey,
             borderRadius: BorderRadius.circular(10),
             child: SizedBox(
-              height: 40,
+              height: 55,
               child: ToggleButtons(
                 isSelected: _selections,
                 onPressed: (index) {
@@ -106,6 +106,9 @@ class _MedicalRecordsScreenState extends State<MedicalRecordsScreen> {
                 ],
               ),
             ),
+          ),
+          SizedBox(
+            height: 10,
           ),
           Expanded(
             child: _selectedTabIndex == 0

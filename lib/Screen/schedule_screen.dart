@@ -76,7 +76,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                         decoration: BoxDecoration(
                           color: _ButtonIndex == 0
-                              ? Color.fromARGB(255, 102, 102, 235)
+                              ? Color.fromARGB(255, 29, 155, 228)
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -128,7 +128,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                         decoration: BoxDecoration(
                           color: _ButtonIndex == 2
-                              ? Color.fromARGB(255, 102, 102, 235)
+                              ? Color.fromARGB(255, 26, 140, 216)
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(10),
                         ),

@@ -119,30 +119,36 @@ class _SignUpState extends State<SignUp> {
             SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 280,
-                child: Material(
-                  elevation: 2,
-                  color: Color.fromARGB(255, 36, 126, 228),
-                  borderRadius: BorderRadius.circular(10),
-                  child: InkWell(
-                    onTap: () {},
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 40),
-                      child: Center(
-                        child: Text(
-                          "Create an Account",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              margin: EdgeInsets.symmetric(horizontal: 50),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
                     ),
+                  ],
+                  color: Colors.blue),
+              child: MaterialButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Login(),
+                    ),
+                  );
+                },
+                elevation: 15,
+                child: Text(
+                  "Create Account",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

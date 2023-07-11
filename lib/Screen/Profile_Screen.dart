@@ -15,10 +15,14 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   bool showPassword = false;
 
-  String _name = 'Shahrukh Khan Qureshi ';
+  String _name = 'Shahrukh Khan Qureshi';
   String _email = 'shahrukhkhanqureshi49@.com';
   String _password = '12345678';
   String _location = 'Lahore, Pakistan';
+  double _age = 25;
+  double _bmi = 23.5;
+  double _height = 175;
+  double _weight = 70;
   File? _profilePic;
 
   Future<void> _editProfilePic() async {
@@ -45,15 +49,35 @@ class _ProfilePageState extends State<ProfilePage> {
                 buildTextField('Full Name', _name, false, (value) {
                   _name = value;
                 }),
+                SizedBox(height: 10),
                 buildTextField('E-mail', _email, false, (value) {
                   _email = value;
                 }),
+                SizedBox(height: 10),
                 buildTextField('Password', _password, true, (value) {
                   _password = value;
                 }),
+                SizedBox(height: 10),
                 buildTextField('Location', _location, false, (value) {
                   _location = value;
                 }),
+                SizedBox(height: 10),
+                buildTextField('Age', _age.toString(), false, (value) {
+                  _age = double.tryParse(value) ?? 0;
+                }),
+                SizedBox(height: 10),
+                buildTextField('BMI', _bmi.toString(), false, (value) {
+                  _bmi = double.tryParse(value) ?? 0;
+                }),
+                SizedBox(height: 10),
+                buildTextField('Height', _height.toString(), false, (value) {
+                  _height = double.tryParse(value) ?? 0;
+                }),
+                SizedBox(height: 10),
+                buildTextField('Weight', _weight.toString(), false, (value) {
+                  _weight = double.tryParse(value) ?? 0;
+                }),
+                SizedBox(height: 20),
               ],
             ),
           ),
@@ -66,6 +90,12 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             TextButton(
               onPressed: () {
+                // Calculate health score here based on the updated values
+                double healthScore = calculateHealthScore();
+
+                // Perform any other necessary actions
+                // ...
+
                 Navigator.of(context).pop();
               },
               child: Text('Save'),
@@ -74,6 +104,16 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       },
     );
+  }
+
+  double calculateHealthScore() {
+    // Perform health score calculation based on age, BMI, height, weight
+    // ...
+
+    // Placeholder calculation (just for demonstration)
+    double healthScore = (_age + _bmi - _height + _weight) / 4;
+
+    return healthScore;
   }
 
   @override
@@ -91,13 +131,15 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
           },
           child: ListView(
+            padding: EdgeInsets.only(bottom: 20), // Add bottom padding
             children: [
+              SizedBox(height: 25),
               Text(
                 'Edit Profile',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
@@ -159,20 +201,67 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 35),
-              buildTextField('Full Name', _name, false, (value) {
-                _name = value;
-              }),
-              buildTextField('E-mail', _email, false, (value) {
-                _email = value;
-              }),
-              buildTextField('Password', _password, true, (value) {
-                _password = value;
-              }),
-              buildTextField('Location', _location, false, (value) {
-                _location = value;
-              }),
-              SizedBox(height: 35),
+              SizedBox(height: 20),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: buildTextField('Full Name', _name, false, (value) {
+                  _name = value;
+                }),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: buildTextField('E-mail', _email, false, (value) {
+                  _email = value;
+                }),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: buildTextField('Password', _password, true, (value) {
+                  _password = value;
+                }),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: buildTextField('Location', _location, false, (value) {
+                  _location = value;
+                }),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: buildTextField('Age', _age.toString(), false, (value) {
+                  _age = double.tryParse(value) ?? 0;
+                }),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: buildTextField('BMI', _bmi.toString(), false, (value) {
+                  _bmi = double.tryParse(value) ?? 0;
+                }),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: buildTextField('Height', _height.toString(), false,
+                    (value) {
+                  _height = double.tryParse(value) ?? 0;
+                }),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: buildTextField('Weight', _weight.toString(), false,
+                    (value) {
+                  _weight = double.tryParse(value) ?? 0;
+                }),
+              ),
+              SizedBox(height: 15),
+              userProfileCard(),
+              SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -221,41 +310,85 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Widget userProfileCard() {
+    double healthScore = calculateHealthScore();
+
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 4,
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Text(
+              'Health Score',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              healthScore.toStringAsFixed(2),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            ListTile(
+              leading: CircleAvatar(
+                backgroundImage: _profilePic != null
+                    ? FileImage(_profilePic!) as ImageProvider<Object>
+                    : NetworkImage(
+                        'https://www.instagram.com/stories/highlights/17905173607466115/',
+                      ) as ImageProvider<Object>,
+              ),
+              title: Text(
+                _name,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Age: ${_age.toStringAsFixed(1)}'),
+                  Text('BMI: ${_bmi.toStringAsFixed(1)}'),
+                  Text('Height: ${_height.toStringAsFixed(1)} cm'),
+                  Text('Weight: ${_weight.toStringAsFixed(1)} kg'),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget buildTextField(
     String labelText,
     String placeholder,
     bool isPasswordTextField,
     Function(String) onChanged,
   ) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 35),
-      child: TextField(
-        obscureText: isPasswordTextField ? !showPassword : false,
-        decoration: InputDecoration(
-          suffixIcon: isPasswordTextField
-              ? IconButton(
-                  onPressed: () {
-                    setState(() {
-                      showPassword = !showPassword;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.remove_red_eye,
-                    color: Colors.grey,
-                  ),
-                )
-              : null,
-          contentPadding: EdgeInsets.only(bottom: 3),
-          labelText: labelText,
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          hintText: placeholder,
-          hintStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: TextField(
+          obscureText: isPasswordTextField ? !showPassword : false,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(vertical: 15),
+            labelText: labelText,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            hintText: placeholder,
+            hintStyle: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
+          onChanged: onChanged,
         ),
-        onChanged: onChanged,
       ),
     );
   }
