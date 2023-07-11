@@ -49,31 +49,24 @@ class _ProfilePageState extends State<ProfilePage> {
                 buildTextField('Full Name', _name, false, (value) {
                   _name = value;
                 }),
-                SizedBox(height: 10),
                 buildTextField('E-mail', _email, false, (value) {
                   _email = value;
                 }),
-                SizedBox(height: 10),
                 buildTextField('Password', _password, true, (value) {
                   _password = value;
                 }),
-                SizedBox(height: 10),
                 buildTextField('Location', _location, false, (value) {
                   _location = value;
                 }),
-                SizedBox(height: 10),
                 buildTextField('Age', _age.toString(), false, (value) {
                   _age = double.tryParse(value) ?? 0;
                 }),
-                SizedBox(height: 10),
                 buildTextField('BMI', _bmi.toString(), false, (value) {
                   _bmi = double.tryParse(value) ?? 0;
                 }),
-                SizedBox(height: 10),
                 buildTextField('Height', _height.toString(), false, (value) {
                   _height = double.tryParse(value) ?? 0;
                 }),
-                SizedBox(height: 10),
                 buildTextField('Weight', _weight.toString(), false, (value) {
                   _weight = double.tryParse(value) ?? 0;
                 }),
@@ -202,63 +195,30 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: buildTextField('Full Name', _name, false, (value) {
-                  _name = value;
-                }),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: buildTextField('E-mail', _email, false, (value) {
-                  _email = value;
-                }),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: buildTextField('Password', _password, true, (value) {
-                  _password = value;
-                }),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: buildTextField('Location', _location, false, (value) {
-                  _location = value;
-                }),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: buildTextField('Age', _age.toString(), false, (value) {
-                  _age = double.tryParse(value) ?? 0;
-                }),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: buildTextField('BMI', _bmi.toString(), false, (value) {
-                  _bmi = double.tryParse(value) ?? 0;
-                }),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: buildTextField('Height', _height.toString(), false,
-                    (value) {
-                  _height = double.tryParse(value) ?? 0;
-                }),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: buildTextField('Weight', _weight.toString(), false,
-                    (value) {
-                  _weight = double.tryParse(value) ?? 0;
-                }),
-              ),
+              buildTextField('Full Name', _name, false, (value) {
+                _name = value;
+              }),
+              buildTextField('E-mail', _email, false, (value) {
+                _email = value;
+              }),
+              buildTextField('Password', _password, true, (value) {
+                _password = value;
+              }),
+              buildTextField('Location', _location, false, (value) {
+                _location = value;
+              }),
+              buildTextField('Age', _age.toString(), false, (value) {
+                _age = double.tryParse(value) ?? 0;
+              }),
+              buildTextField('BMI', _bmi.toString(), false, (value) {
+                _bmi = double.tryParse(value) ?? 0;
+              }),
+              buildTextField('Height', _height.toString(), false, (value) {
+                _height = double.tryParse(value) ?? 0;
+              }),
+              buildTextField('Weight', _weight.toString(), false, (value) {
+                _weight = double.tryParse(value) ?? 0;
+              }),
               SizedBox(height: 15),
               userProfileCard(),
               SizedBox(height: 15),
