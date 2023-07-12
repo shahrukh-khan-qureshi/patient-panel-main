@@ -352,7 +352,7 @@ class _HomeState extends State<Home> {
               ),
               SizedBox(height: 25),
               Padding(
-                padding: EdgeInsets.only(left: 15),
+                padding: EdgeInsets.symmetric(horizontal: 7),
                 child: Text(
                   "What are you looking for?",
                   style: TextStyle(
@@ -403,7 +403,7 @@ class _HomeState extends State<Home> {
               ),
               SizedBox(height: 15),
               Padding(
-                padding: EdgeInsets.only(left: 15),
+                padding: EdgeInsets.symmetric(horizontal: 7),
                 child: Text(
                   'Popular Doctors',
                   style: TextStyle(
@@ -1168,38 +1168,57 @@ class _drawerWidgetState extends State<drawerWidget> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/wave_design_image.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Stack(
               children: [
-                TextButton(
-                  onPressed: () async {
-                    final updatedProfilePic = await Navigator.push<File?>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ProfilePage(updatedProfilePic: _profilePic),
-                      ),
-                    );
-
-                    if (updatedProfilePic != null) {
-                      setState(() {
-                        _profilePic = updatedProfilePic;
-                      });
-                    }
-                  },
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Color.fromARGB(255, 35, 159, 231),
-                    backgroundImage:
-                        _profilePic != null ? FileImage(_profilePic!) : null,
-                  ),
+                Image.asset(
+                  "assets/wave_design_image.png",
+                  height: 300,
+                  width: MediaQuery.of(context).size.width,
+                  fit: BoxFit.cover,
                 ),
-                SizedBox(height: 10),
-                Text(
-                  'Username',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.blue,
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () async {
+                          final updatedProfilePic = await Navigator.push<File?>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProfilePage(updatedProfilePic: _profilePic),
+                            ),
+                          );
+
+                          if (updatedProfilePic != null) {
+                            setState(() {
+                              _profilePic = updatedProfilePic;
+                            });
+                          }
+                        },
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Color.fromARGB(255, 35, 159, 231),
+                          backgroundImage: _profilePic != null
+                              ? FileImage(_profilePic!)
+                              : null,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Username',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
